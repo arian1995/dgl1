@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from dgl.nn.pytorch import GATConv
+from torch_geometric.nn.conv import GATv2Conv
 
 class SemanticAttention(nn.Module):
     def __init__(self, in_size, hidden_size=128):
@@ -51,7 +51,7 @@ class HANLayer(nn.Module):
         # One GAT layer for each meta path based adjacency matrix
         self.gat_layers = nn.ModuleList()
         for i in range(num_meta_paths):
-            self.gat_layers.append(GATConv(in_size, out_size, layer_num_heads,
+            self.gat_layers.append(GATv2Conv(in_size, out_size, layer_num_heads,
                                            dropout, dropout, activation=F.elu))
         self.semantic_attention = SemanticAttention(in_size=out_size * layer_num_heads)
         self.num_meta_paths = num_meta_paths
